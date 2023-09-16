@@ -1,0 +1,35 @@
+/* Style the body to center-align text and set a background color */
+body {
+    text-align: center;
+    background-color: #f4f4f4;
+  }
+  
+  /* Buttons */
+  
+  /* Style the buttons, leaving room for customization */
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    /* TODO: Add more styles for buttons */
+  }
+  
+  /* Quiz Layout */
+  
+  /* Style the timer display */
+  #timer {
+    font-size: 24px;
+    margin-bottom: 20px;
+    /* TODO: Add more styles for the timer display */
+  }
+  
+  /* Style the question area */
+  #questionArea {
+    font-size: 20px;
+    margin-bottom: 20px;
+    /* TODO: Add more styles for the question area */
+  }
+  
+  /* Style the answer buttons container */
+  #answerButtons {
+    /* TODO: Add styles for the answer buttons container */
+  }
