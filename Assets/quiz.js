@@ -1,7 +1,7 @@
-// Wait for the DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
+// Using jQuery's ready function to wait for the DOM to be fully loaded
+$(document).ready(function() {
   // Initialize quiz variables
-  let time = 120; // Increased time to account for the added questions
+  let time = 60;
   let timer;
   let currentQuestionIndex = 0;
   let questions = [
@@ -54,3 +54,79 @@ document.addEventListener('DOMContentLoaded', function() {
       question: "Which HTML element is used for defining a form?",
       choices: ["<form>", "<input>", "<formbox>", "<textfield>"],
       answer: "<form>"
+    }
+  ];
+  
+ // Reference HTML elements using jQuery
+ const startButton = $('#startButton');
+ const viewHighScores = $('#viewHighScores');  // New addition
+ const timerDiv = $('#timer');
+ const questionArea = $('#questionArea');
+ const answerButtons = $('#answerButtons');
+
+ // Add an event listener to the start button using jQuery
+ startButton.click(startQuiz);
+
+ // New: Add an event listener for viewing high scores
+ viewHighScores.click(function() {
+   let highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+   alert(`High Scores:\n${highScores.map(score => `${score.initials}: ${score.score}`).join("\n")}`);
+ });
+
+ // Function to start the quiz
+ function startQuiz() {
+   timer = setInterval(function() {
+     time--;
+     timerDiv.text(`Time: ${time}`);
+     if (time <= 0) {
+       endQuiz();
+     }
+   }, 1000);
+   loadQuestion();
+ }
+
+ // Function to load a question
+ function loadQuestion() {
+   const currentQuestion = questions[currentQuestionIndex];
+   questionArea.text(currentQuestion.question);
+   answerButtons.empty();  // Clear the previous buttons
+   $.each(currentQuestion.choices, function(index, choice) {
+     const button = $('<button>').text(choice);
+     button.click(function() {
+       checkAnswer(choice);
+     });
+     answerButtons.append(button);
+   });
+ }
+
+ // Function to check an answer
+ function checkAnswer(answer) {
+   const correct = questions[currentQuestionIndex].answer === answer;
+   if (!correct) {
+     time -= 10;
+   }
+   currentQuestionIndex++;
+   if (currentQuestionIndex < questions.length && time > 0) {
+     loadQuestion();
+   } else {
+     endQuiz();
+   }
+ }
+
+ // Function to end the quiz
+ function endQuiz() {
+   clearInterval(timer);
+   const initials = prompt("Game Over! Enter your initials:");
+ 
+   // Save highscore logic
+   let highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+   let newScore = { initials: initials, score: time };
+   highScores.push(newScore);
+   highScores.sort((a, b) => b.score - a.score);
+   highScores = highScores.slice(0, 5);  // Save only top 5 scores
+   localStorage.setItem("highScores", JSON.stringify(highScores));
+ 
+   // Display the high scores
+   alert(`High Scores:\n${highScores.map(score => `${score.initials}: ${score.score}`).join("\n")}`);
+ }
+});
